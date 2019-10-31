@@ -1,0 +1,18 @@
+version: '3'
+services:
+  guacd:
+    build: .
+    environment:
+      - GUACD_LOG_LEVEL=debug
+    volumes: 
+      - ./:/tmp/libguac-client-ball
+    ports:
+      - "4822:4822"
+
+  avocado:
+    image: avocado:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - guacd
+    command: avocado --check-origin=false -s secret --debug
